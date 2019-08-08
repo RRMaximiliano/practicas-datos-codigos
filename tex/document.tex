@@ -146,18 +146,65 @@ Vea este do-file para ver un ejemplo de un buen encabezado: \href{http://www.pov
 	\item Algunas líneas en blanco: a veces Stata no reconoce la última línea de un archivo, por lo cual siempre incluye un poco de               espacio en blanco libre.
 \end{itemize}
 
+\textbf{En el cuerpo de cada archivo do que escriba, debe:}
 
+\begin{itemize}
+	\item Organice el código en secciones: con cada tarea discreta (por ejemplo, renombrar, trabajar con ID únicos, ejecutar                       regresiones) claramente etiquetados con un comentario como encabezado. Esto es esencial para localizar y organizar 		      elementos clave en su código (para comparar piense en capítulos de libros). Una gran práctica para ayudar con la 			      organización es usar pseudocódigo, donde escribes una versión mitad inglés / mitad código antes de escribir el código 		      formal. Ver este documento, \href{http://courses.edx.org/c4x/MITx/6.00.1x/asset/files_ps04_files_WhyPseudocode.pdf}{Pseudocódigo 101} \footnote{Introduction to Computer Science and Programming Using Python, MIT6.00.1x. Accessed February 2015}  para                 más información sobre qué deben contener estos fragmentos de código.
+	\item Haga comentarios con frecuencia, siempre que sea poco probable que el código en sí o la motivación sean evidentes.	               Si no estás seguro de si comentar o no, definitivamente comete un error al no comentar. Concentrado sobre \textbf{cómo} y               \textbf{por qué} de lo que se está haciendo en el código. Tenga en cuenta que lo que es obvio para usted ¡puede que no sea               obvio para usted mismo o para otros que usan su código!
+	\item Crear marcadores de comentarios en "eventos de código importantes". Estos marcadores pueden ser cualquier conjunto único                 de caracteres que se pueden buscar fácilmente, ejemplo: "//decisión". Probablemente debería marcar lo siguiente importante               eventos:
+		\begin{itemize}
+			\item Crear / exportar una tabla, gráfico o tabla
+			\item Fusionar y anexar
+			\item Remodelación y colapso
+			\item Caída de duplicados, cambio de identificación única
+		\end{itemize}
+	\item Además, es fundamental marcar cuál es el resultado esperado de estos importantes eventos de código. por ejemplo, qué 	 	       porcentaje de observaciones en una fusión debería coincidir entre conjuntos de datos, que deberían estar solo en el                     conjunto de datos de uso, etc.? La idea aquí es que siempre que se produzca un cambio importante en los datos hecho, la                 expectativa detrás de esto debe establecerse claramente para que pueda ser fácilmente verificado y entendido por usuarios               posteriores
+	\item Marque puntos en su código que necesita volver a visitar. Por ejemplo, una decisión que deberá tomarse más tarde. Un                     marcador de ejemplo: /!\
+\end{itemize}
+
+Consulte este do file para ver un ejemplo de \href{http://www.poverty-action.org/research-transparency/example-code-comments}{código bien comentado}. Observe las diferentes formas en que los comentarios fueron utilizado, la marcación de eventos clave, temas a revisar y explicaciones de por qué se tomaron decisiones.
 
 %----------------------------------------------------------------------------------------
 \subsection{Cómo escribir un do-file maestro}
 \label{sec:domaestro}
 %----------------------------------------------------------------------------------------
 
+Crear un archivo maestro es esencial para delinear y ejecutar todo el código del proyecto. Aquí están los puntos clave para
+considerar:
+
+        \begin{itemize}
+		\item El maestro ejecuta todos los archivos do que están contenidos en su proyecto o una subsección específica de su 	 		       proyecto. Por ejemplo, puede tener un archivo maestro de limpieza, un archivo maestro de análisis, etc., y un 	  		        archivo maestro de proyecto que ejecuta todos estos.
+		\item El maestro describe cualquier información general relevante sobre el proyecto y lo que cada archivo de do file                           hace.
+		\item Todos los comandos escritos por el usuario que se usaron en el código deben aparecer junto con el código que 	 		       instala cada comando. Recuerde que es probable que hayas utilizado una serie de comandos programados por el                             usuario que habían sido previamente instalado. Estos también deberían estar listados.
+		\item Como con cualquier archivo do, el archivo do maestro debe incluir elementos estándar en un encabezado, como se 			      describe encima.
+	\end{itemize}
+
+Aquí hay un archivo maestro de ejemplo: \href{http://www.poverty-action.org/research-transparency/example-master}{example_master}.
+
 %----------------------------------------------------------------------------------------
 \subsection{Cómo organizar y referenciar do-files}
 \label{sec:doorganizar}
 %----------------------------------------------------------------------------------------
 
+La manera en que se organizan sus archivos de código es fundamental para su comprensión y facilitará enormemente su
+funciona a medida que crece el número de archivos de código.
+
+	\begin{itemize}
+		\item No existe una única estructura de carpetas perfecta, se trata de tener una que sea lógica y que utilice 		                               consistentemente es esencial. Aquí hay un \hyperef{fig:carpetas}{ejemplo}.
+		\item Estas carpetas implican hacer una distinción clara entre la parte de análisis del proyecto y porción de gestión / 		      limpieza de datos. Dentro de cada uno, los archivos de código se clasifican según la ronda de 			      		       encuestas y recolección de datos con la que están asociados, con un archivo maestro para cada sección.
+	\end{itemize}
+
+\textbf{Consejos útiles:}
+
+	\begin{itemize}
+		\item Cuando los do file deben ejecutarse en orden, asegúrese de numerarlos adecuadamente (por ejemplo, 				      0_master.do). Si el orden no importa, tome nota de esto en el do file maestro.
+		\item Utilice una carpeta de "archivo" para ocultar todos los archivos antiguos del directorio de trabajo, a fin de 			      limitar la confusión sobre qué do files usar.
+		\item No genere conjuntos de datos "basura": mantenga la salida mínima necesaria. Si desea un conjunto de datos para uso 		       temporal, puede generar un conjunto de datos temporal que desaparecerá al final del programa.
+		\item Mantenga los datos sin procesar en la forma más pura posible, esto significa:
+			\begin{itemize}
+			  \item Importar directamente a Stata en la forma en que llegaron los datos, ej. Importar Excel si el archivo 			                esta en formato Excel: no lo guarde primero como CSV.
+			  \item Limpie tanto como sea posible dentro de Stata: no realice cambios no restreables en el archivo original.                                 La clave es mantener todas las decisiones de limpieza replicables, es decir, en tus do files.
+			\end{itemize}
 %----------------------------------------------------------------------------------------
 \subsection{Usando referencias relativas}
 \label{sec:refrelativas}
