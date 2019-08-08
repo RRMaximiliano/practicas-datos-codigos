@@ -37,7 +37,7 @@ La estructura de carpetas describe la organización de las carpetas que contiene
 
 \textbf{¿Por qué?} 
 
-Mantener una estructura de carpetas lógica significa que es mucho más fácil encontrar los archivos que está buscando. También facilita enormemente compartir un proyecto con otras personas, como los investigadores principales (PI, por sus siglas en inglés) y los nuevos asistentes de investgiación (RA, por sus siglas en inglés) que trabajan en un proyecto. Tener un conjunto desorganizado de archivos significa que las transiciones de proyectos se vuelven mucho más difíciles
+Mantener una estructura de carpetas lógica significa que es mucho más fácil encontrar los archivos que está buscando. También facilita enormemente compartir un proyecto con otras personas, como los investigadores principales (PI, por sus siglas en inglés) y los nuevos asistentes de investigación (RA, por sus siglas en inglés) que trabajan en un proyecto. Tener un conjunto desorganizado de archivos significa que las transiciones de proyectos se vuelven mucho más difíciles
 
 
 \textbf{¿Cómo?}
@@ -63,11 +63,30 @@ Independientemente de la estructura de carpetas específica que usted decida, es
 
 \textbf{¿Qué?}
 
+Los nombres de las variables deben estar en un formato consistente. Las etiquetas deben aplicarse a todas las variables en un formato consistente. Las etiquetas de valor también son necesarias para algunas variables.
 
 \textbf{¿Por qué?} 
 
+Sin nombres y etiquetas claros, sería muy difícil entender tus datos. Estas proporcionan información esencial sobre las variables, sin tener que volver a mirar cómo se construyeron. Incluir números de preguntas y\/o texto en las etiquetas de variables permite vincular el conjunto de datos con el cuestionario original.
 
 \textbf{¿Cómo?} 
+
+Las etiquetas de las variables deben adjuntarse a todas las variables una vez que se importen a Stata. Esto se puede hacer de varias maneras. Si está ejecutando una encuesta ODK / SurveyCTO, usando el comando odkmeta etiquetará sus variables con la etiqueta correspondiente que ha definido en el formulario ODK. De lo contrario, puede definir etiquetas manualmente en Stata. Además, no olvide \textbf{etiquetar las variables que cree después de la importación inicial}, como durante la limpieza y el análisis de datos.
+
+Consulte este recurso sobre etiquetado variable para obtener más información sobre los convenios de \href{https://www.poverty-action.org/sites/default/files/Naming-and-Labeling-Data.pdf}{etiquetado} adecuados. En resumen, hay dos opciones principales para etiquetar en relación con el nombre de la variable. Si bien cualquiera de los dos puede usarse, asegúrese de elegir uno formatear y mantenerlo en todo momento.
+
+\begin{itemize}
+	\item Asigne una etiqueta descriptiva corta, mientras que el nombre de la variable hace referencia al número de pregunta del
+	      cuestionario
+	\item Asigne una etiqueta descriptiva corta que incluya el número de la pregunta, siendo el nombre de la variable
+	      descriptivo en sí
+\end{itemize}
+
+\textbf{Nota:} Si una variable proviene directamente de un cuestionario, se debe establecer un vínculo claro entre el respectivo texto de pregunta y la variable. Incluir el texto de la pregunta en la etiqueta podría funcionar bien. Sin embargo, hay un límite de 80 caracteres en la longitud de la etiqueta. En tal caso, recomendamos incluir el texto de las preguntas como una \textbf{nota} variable.
+
+Asignar nombres de variables adecuados también es importante. Como se describió anteriormente, los nombres de las variables pueden tomar varias formas. Si necesitas cambiar el nombre de las variables, el comando \textit{rename} de Stata ofrece mucha flexibilidad para hacerlo. Ver la Stata 102 módulo de capacitación sobre Naming and Labeling para más. (Nota: los módulos Stata aún no están disponibles públicamente).
+
+Stata 102 también analiza el \textbf{etiquetado de valores}. Es importante asignar etiquetas de valor a las variables codificadas númericamente. Por ejemplo, es común tener preguntas sobre la ocupación, pero en su lugar se ingresan códigos (números). La asignación de una etiqueta de valor es necesaria para interpretar la salida a fin de establecer el enlace entre el número subyacente y la ocupación que representa.
 
 %----------------------------------------------------------------------------------------
 \subsection{Manejo de valores perdidos}
@@ -76,27 +95,116 @@ Independientemente de la estructura de carpetas específica que usted decida, es
 
 \textbf{¿Qué?}
 
+Probablemente a menudo aparecerán valores perdidos en tus datos: generalmente están representados en Stata por un punto (para valores numéricos) o comillas dobles (para variables de cadenas o texto). Los valores perdidos pueden ser el resultado de varias fuentes, como saltos en el encuesta, "no sabe" o rechazos para responder la pregunta del cuestionario. Es fundamental asegurarse de que estos valores estén estandarizados a lo largo de tu base de datos. Además, al codificar, es importante estar siempre atento a los valores perdidos y convertir a valores perdidos extendidos (por ejemplo, .d, .r, .n) donde sea posible.
 
 \textbf{¿Por qué?}
 
+Hacer un seguimiento de los valores perdidos y estandarizarlos puede mitigar numerosos problemas de codificación. En Stata especialmente, muchos errores o errores son el resultado de no darse cuenta de cómo los valores perdidos pueden afectar el análisis. Usando los valores perdidos extendidos permiten adjuntarles etiquetas de valor, lo que facilita enormemente la comprensión de qué tipos de respuestas a las que se refieren dichos valores perdidos. 
 
 \textbf{¿Cómo?}
+
+Primero, consulte la \href{http://www.poverty-action.org/research-transparency/standardizing-missing-values}{guía} de IPA para estandarizar los valores perdidos. La conclusión clave es convertir todo valor No sabe/No responde/NA al "estándar IPA" a valores perdidos extendidos como .d, .r y .n, respectivamente. Tenga en cuenta que esto no se aplica a cualquier valor de la encuesta que se omitió correctamente como parte de un patrón de omisión normal, que permanece como puntos para variables numéricas (.).
+
+Otros puntos clave:
+
+\begin{itemize}
+	\item  Recuerde que en Stata, todos los valores perdidos se consideran numéricamente más grandes que todos los valores no                      faltantes [todo valor no perdido < . < .a < .b < .c < ... < .z]. Esto significa que debe tener mucho cuidado al grabar y                reemplazar valores. Por ejemplo, si recodifica valores que son mayores que un número dado, también recodificará los                      valores perdidos. \textbf{¡Siempre tenga en cuenta los valores perdidos al codificar!} Tenga cuidado de leer                            detenidamente los archivos de ayuda de las funciones egen, ya que los valores faltantes se pueden interpretar de una                    manera que puede afectar en gran medida sus resultados (por ejemplo, \textit{rowtotal}).
+	\item  Es crítico resaltar claramente cualquier regla que trate con valores perdidos en su do-file para que la consistencia de                  los cambios puedaa ser comprobada. Por ejemplo, incluya un comentario en la parte superior de un archivo que indique                    "Los valores perdidos fueron recodificado a cero en los casos x e y".
+	\item  Los valores perdidos extendidos (a diferencia de los valores perdidos normales) pueden ser etiquetados como valores. Esto                es altamente recomendado dada la información adicional que proporciona.
+\end{itemize}
 
 %----------------------------------------------------------------------------------------
 \subsection{Escribiendo do-files}
 \label{sec:dofiles}
 %----------------------------------------------------------------------------------------
 
+\textbf{En la parte superior de cada do file debe incluir:}
+
+\begin{itemize}
+	\item Su nombre y los nombres de todas las personas que han modificado el archivo con información de contacto.
+	\item La fecha en que se creó el archivo do, así como la fecha en que se modificó más recientemente.
+	\item El propósito de este archivo do particular: ¿qué hace?
+	\item Versión 13.1 (o cualquier versión de Stata que esté utilizando actualmente). Esto asegura que su archivo será	                       compatible y replicable en futuras versiones de Stata. Esto debería escribirse como un comando, no un comentario. \end{itemize}
+
+\textbf{Recomendamos que también incluya estos elementos en un código "encabezado":}
+
+\begin{itemize}
+	\item Enumere los datos que utiliza el do-file, así como los conjuntos de datos que produce.
+	\item \textit{set more off}: esto permite que los archivos do se ejecuten sin interrupciones; de lo contrario, Stata se detendrá               periódicamente y preguntará si le gustaría ver más resultados del programa actualmente en ejecución.
+	\item Iniciar \textit{log using 'X'}: crear un archivo de registro que captura todos los resultados del do file resultante.                   [Nota: también es práctica común para incluir una línea de código que cierra cualquier archivo de registro abierto:                     textit{capture log close}, para evitar que Stata encuentre un error si un archivo de registro ya está abierto].
+	\item Establezca el directorio de trabajo utilizando fastcd, cd o globals. Trabajar con rutas de archivo se discutirá más
+              \hyperref[sec:refrelativas]{abajo}.  
+\end{itemize}
+
+Vea este do-file para ver un ejemplo de un buen encabezado: \href{http://www.poverty-action.org/research-transparency/example-header}{example_header}.
+
+\textbf{Recomendamos que también incluya estos elementos en un código "pie de página":}
+
+\begin{itemize}
+	\item \textit{capture log close}: esto garantizará que Stata deje de iniciar sesión al final de su do file.
+	\item \textit{exit}: esto detendrá la ejecución del do file.
+	\item Algunas líneas en blanco: a veces Stata no reconoce la última línea de un archivo, por lo cual siempre incluye un poco de               espacio en blanco libre.
+\end{itemize}
+
+\textbf{En el cuerpo de cada archivo do que escriba, debe:}
+
+\begin{itemize}
+	\item Organice el código en secciones: con cada tarea discreta (por ejemplo, renombrar, trabajar con ID únicos, ejecutar                       regresiones) claramente etiquetados con un comentario como encabezado. Esto es esencial para localizar y organizar 		      elementos clave en su código (para comparar piense en capítulos de libros). Una gran práctica para ayudar con la 			      organización es usar pseudocódigo, donde escribes una versión mitad inglés / mitad código antes de escribir el código 		      formal. Ver este documento, \href{http://courses.edx.org/c4x/MITx/6.00.1x/asset/files_ps04_files_WhyPseudocode.pdf}{Pseudocódigo 101} \footnote{Introduction to Computer Science and Programming Using Python, MIT6.00.1x. Accessed February 2015}  para                 más información sobre qué deben contener estos fragmentos de código.
+	\item Haga comentarios con frecuencia, siempre que sea poco probable que el código en sí o la motivación sean evidentes.	               Si no estás seguro de si comentar o no, definitivamente comete un error al no comentar. Concentrado sobre \textbf{cómo} y               \textbf{por qué} de lo que se está haciendo en el código. Tenga en cuenta que lo que es obvio para usted ¡puede que no sea               obvio para usted mismo o para otros que usan su código!
+	\item Crear marcadores de comentarios en "eventos de código importantes". Estos marcadores pueden ser cualquier conjunto único                 de caracteres que se pueden buscar fácilmente, ejemplo: "//decisión". Probablemente debería marcar lo siguiente importante               eventos:
+		\begin{itemize}
+			\item Crear / exportar una tabla, gráfico o tabla
+			\item Fusionar y anexar
+			\item Remodelación y colapso
+			\item Caída de duplicados, cambio de identificación única
+		\end{itemize}
+	\item Además, es fundamental marcar cuál es el resultado esperado de estos importantes eventos de código. por ejemplo, qué 	 	       porcentaje de observaciones en una fusión debería coincidir entre conjuntos de datos, que deberían estar solo en el                     conjunto de datos de uso, etc.? La idea aquí es que siempre que se produzca un cambio importante en los datos hecho, la                 expectativa detrás de esto debe establecerse claramente para que pueda ser fácilmente verificado y entendido por usuarios               posteriores
+	\item Marque puntos en su código que necesita volver a visitar. Por ejemplo, una decisión que deberá tomarse más tarde. Un                     marcador de ejemplo: /!\
+\end{itemize}
+
+Consulte este do file para ver un ejemplo de \href{http://www.poverty-action.org/research-transparency/example-code-comments}{código bien comentado}. Observe las diferentes formas en que los comentarios fueron utilizado, la marcación de eventos clave, temas a revisar y explicaciones de por qué se tomaron decisiones.
+
 %----------------------------------------------------------------------------------------
 \subsection{Cómo escribir un do-file maestro}
 \label{sec:domaestro}
 %----------------------------------------------------------------------------------------
+
+Crear un archivo maestro es esencial para delinear y ejecutar todo el código del proyecto. Aquí están los puntos clave para
+considerar:
+
+        \begin{itemize}
+		\item El maestro ejecuta todos los archivos do que están contenidos en su proyecto o una subsección específica de su 	 		       proyecto. Por ejemplo, puede tener un archivo maestro de limpieza, un archivo maestro de análisis, etc., y un 	  		        archivo maestro de proyecto que ejecuta todos estos.
+		\item El maestro describe cualquier información general relevante sobre el proyecto y lo que cada archivo de do file                           hace.
+		\item Todos los comandos escritos por el usuario que se usaron en el código deben aparecer junto con el código que 	 		       instala cada comando. Recuerde que es probable que hayas utilizado una serie de comandos programados por el                             usuario que habían sido previamente instalado. Estos también deberían estar listados.
+		\item Como con cualquier archivo do, el archivo do maestro debe incluir elementos estándar en un encabezado, como se 			      describe encima.
+	\end{itemize}
+
+Aquí hay un archivo maestro de ejemplo: \href{http://www.poverty-action.org/research-transparency/example-master}{example_master}.
 
 %----------------------------------------------------------------------------------------
 \subsection{Cómo organizar y referenciar do-files}
 \label{sec:doorganizar}
 %----------------------------------------------------------------------------------------
 
+La manera en que se organizan sus archivos de código es fundamental para su comprensión y facilitará enormemente su
+funciona a medida que crece el número de archivos de código.
+
+	\begin{itemize}
+		\item No existe una única estructura de carpetas perfecta, se trata de tener una que sea lógica y que utilice 		                               consistentemente es esencial. Aquí hay un \hyperef{fig:carpetas}{ejemplo}.
+		\item Estas carpetas implican hacer una distinción clara entre la parte de análisis del proyecto y porción de gestión / 		      limpieza de datos. Dentro de cada uno, los archivos de código se clasifican según la ronda de 			      		       encuestas y recolección de datos con la que están asociados, con un archivo maestro para cada sección.
+	\end{itemize}
+
+\textbf{Consejos útiles:}
+
+	\begin{itemize}
+		\item Cuando los do file deben ejecutarse en orden, asegúrese de numerarlos adecuadamente (por ejemplo, 				      0_master.do). Si el orden no importa, tome nota de esto en el do file maestro.
+		\item Utilice una carpeta de "archivo" para ocultar todos los archivos antiguos del directorio de trabajo, a fin de 			      limitar la confusión sobre qué do files usar.
+		\item No genere conjuntos de datos "basura": mantenga la salida mínima necesaria. Si desea un conjunto de datos para uso 		       temporal, puede generar un conjunto de datos temporal que desaparecerá al final del programa.
+		\item Mantenga los datos sin procesar en la forma más pura posible, esto significa:
+			\begin{itemize}
+			  \item Importar directamente a Stata en la forma en que llegaron los datos, ej. Importar Excel si el archivo 			                esta en formato Excel: no lo guarde primero como CSV.
+			  \item Limpie tanto como sea posible dentro de Stata: no realice cambios no restreables en el archivo original.                                 La clave es mantener todas las decisiones de limpieza replicables, es decir, en tus do files.
+			\end{itemize}
 %----------------------------------------------------------------------------------------
 \subsection{Usando referencias relativas}
 \label{sec:refrelativas}
