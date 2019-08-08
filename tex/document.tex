@@ -3,6 +3,33 @@
 \documentclass[11pt,en]{elegantpaper}
 
 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
 \title{Investigación reproducible \\ Buenas prácticas para el manejo de datos y códigos\footnote{Traducción al español a cargo de: Sebastián Hernández y Rony Rodríguez-Ramírez.}}
 \author{Harrison Diamond Pollock \and Erica Chuang \and Stephanie Wykstra}
 \date{\today}
@@ -244,6 +271,34 @@ funciona a medida que crece el número de archivos de código.
 \label{sec:refrelativas}
 %----------------------------------------------------------------------------------------
 
+
+\begin{lstlisting}
+	global path C:/My Documents/My Project Folder
+\end{lstlisting}
+
+
+\begin{lstlisting}
+	merge using "$path/data/baseline_clean.dta"
+\end{lstlisting}
+
+\begin{lstlisting}
+	cd "C:/My Documents/My Project Folder"
+\end{lstlisting}
+
+\begin{lstlisting}
+	merge 1:1 using "data/baseline_clean.dta"
+\end{lstlisting}
+
+\begin{lstlisting}
+	if c(username) == "user1" {
+		cd "C:/Users/user1/analysis/do"
+	}
+	else if c(username) == "user2" {
+		cd "C:/Users/user2/analysis/do"
+	}
+\end{lstlisting}
+
+
 %----------------------------------------------------------------------------------------
 \newpage 
 \section{Mantener un buen código y documentación de datos}
@@ -304,6 +359,50 @@ Mantener la PII segura en todo momento cumple con una responsabilidad fundamenta
 Todos los archivos que contienen PII deben estar encriptados en todos los puntos del proceso de flujo de datos, desde el punto de origen hasta el almacenamiento en dispositivos locales y la nube. IPA recomienda usar el software \href{https://www.boxcryptor.com/}{BoxCryptor} para cifrar dichos archivos (y carpetas).
 
 Siempre que sea posible, la PII debe ser eliminada de sus datos y/o archivos do. Consulte este \href{http://www.poverty-action.org/research-transparency/pii-searching}{documento} para obtener instrucciones más detalladas sobre las mejores prácticas sobre cómo hacer esto en Stata. No hay mejor sustituto para garantizar que se elimine la PII que tener un conocimiento completo de la base de datos con el que está trabajando. Siempre es preferible errar con precaución: si una variable (o un conjunto de variables) puede identificar de manera plausible a encuestados particulares, deben eliminarse de los archivos sin cifrar.
+
+\noindent
+\textbf{Ejemplos de PII, del Manual de seguridad de datos de IPA:}
+
+\begin{multicols}{3}
+
+\begin{itemize}
+	\item Nombres
+	
+	\item Número fax
+	
+	\item Números de beneficiarios del plan de salud
+	
+	\item Todas las subdivisiones geográficas más pequeñas que el estado / provincia
+	
+	\item Correos electrónicos
+	
+	\item Números de cuenta
+	
+	\item[\vspace{\fill}]
+	
+	\item Números de seguridad social
+	
+	\item Números de certificado o licencia
+	
+	\item Números telefónicos
+	
+	\item Números de registros médicos
+	
+	\item Identificadores de vehículos y números de serie.
+	
+	\item Identificadores de dispositivo y números de serie.
+
+	\item Todos los elementos de fechas directamente relacionados con un individuo (excepto año)
+		
+	\item URLs web
+	
+	\item Números de dirección de protocolo de Internet
+	
+	\item Identificadores biométricos que incluyen huellas dactilares y de voz
+	
+\end{itemize}
+
+\end{multicols}
 
 %----------------------------------------------------------------------------------------
 \newpage 
