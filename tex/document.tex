@@ -37,7 +37,7 @@ La estructura de carpetas describe la organización de las carpetas que contiene
 
 \textbf{¿Por qué?} 
 
-Mantener una estructura de carpetas lógica significa que es mucho más fácil encontrar los archivos que está buscando. También facilita enormemente compartir un proyecto con otras personas, como los investigadores principales (PI, por sus siglas en inglés) y los nuevos asistentes de investgiación (RA, por sus siglas en inglés) que trabajan en un proyecto. Tener un conjunto desorganizado de archivos significa que las transiciones de proyectos se vuelven mucho más difíciles
+Mantener una estructura de carpetas lógica significa que es mucho más fácil encontrar los archivos que está buscando. También facilita enormemente compartir un proyecto con otras personas, como los investigadores principales (PI, por sus siglas en inglés) y los nuevos asistentes de investigación (RA, por sus siglas en inglés) que trabajan en un proyecto. Tener un conjunto desorganizado de archivos significa que las transiciones de proyectos se vuelven mucho más difíciles
 
 
 \textbf{¿Cómo?}
@@ -63,11 +63,30 @@ Independientemente de la estructura de carpetas específica que usted decida, es
 
 \textbf{¿Qué?}
 
+Los nombres de las variables deben estar en un formato consistente. Las etiquetas deben aplicarse a todas las variables en un formato consistente. Las etiquetas de valor también son necesarias para algunas variables.
 
 \textbf{¿Por qué?} 
 
+Sin nombres y etiquetas claros, sería muy difícil entender tus datos. Estas proporcionan información esencial sobre las variables, sin tener que volver a mirar cómo se construyeron. Incluir números de preguntas y\/o texto en las etiquetas de variables permite vincular el conjunto de datos con el cuestionario original.
 
 \textbf{¿Cómo?} 
+
+Las etiquetas de las variables deben adjuntarse a todas las variables una vez que se importen a Stata. Esto se puede hacer de varias maneras. Si está ejecutando una encuesta ODK / SurveyCTO, usando el comando odkmeta etiquetará sus variables con la etiqueta correspondiente que ha definido en el formulario ODK. De lo contrario, puede definir etiquetas manualmente en Stata. Además, no olvide \textbf{etiquetar las variables que cree después de la importación inicial}, como durante la limpieza y el análisis de datos.
+
+Consulte este recurso sobre etiquetado variable para obtener más información sobre los convenios de \href{https://www.poverty-action.org/sites/default/files/Naming-and-Labeling-Data.pdf}{etiquetado} adecuados. En resumen, hay dos opciones principales para etiquetar en relación con el nombre de la variable. Si bien cualquiera de los dos puede usarse, asegúrese de elegir uno formatear y mantenerlo en todo momento.
+
+\begin{itemize}
+	\item Asigne una etiqueta descriptiva corta, mientras que el nombre de la variable hace referencia al número de pregunta del
+	      cuestionario
+	\item Asigne una etiqueta descriptiva corta que incluya el número de la pregunta, siendo el nombre de la variable
+	      descriptivo en sí
+\end{itemize}
+
+\textbf{Nota:} Si una variable proviene directamente de un cuestionario, se debe establecer un vínculo claro entre el respectivo texto de pregunta y la variable. Incluir el texto de la pregunta en la etiqueta podría funcionar bien. Sin embargo, hay un límite de 80 caracteres en la longitud de la etiqueta. En tal caso, recomendamos incluir el texto de las preguntas como una \textbf{nota} variable.
+
+Asignar nombres de variables adecuados también es importante. Como se describió anteriormente, los nombres de las variables pueden tomar varias formas. Si necesitas cambiar el nombre de las variables, el comando \textit{rename} de Stata ofrece mucha flexibilidad para hacerlo. Ver la Stata 102 módulo de capacitación sobre Naming and Labeling para más. (Nota: los módulos Stata aún no están disponibles públicamente).
+
+Stata 102 también analiza el \textbf{etiquetado de valores}. Es importante asignar etiquetas de valor a las variables codificadas númericamente. Por ejemplo, es común tener preguntas sobre la ocupación, pero en su lugar se ingresan códigos (números). La asignación de una etiqueta de valor es necesaria para interpretar la salida a fin de establecer el enlace entre el número subyacente y la ocupación que representa.
 
 %----------------------------------------------------------------------------------------
 \subsection{Manejo de valores perdidos}
@@ -76,16 +95,58 @@ Independientemente de la estructura de carpetas específica que usted decida, es
 
 \textbf{¿Qué?}
 
+Probablemente a menudo aparecerán valores perdidos en tus datos: generalmente están representados en Stata por un punto (para valores numéricos) o comillas dobles (para variables de cadenas o texto). Los valores perdidos pueden ser el resultado de varias fuentes, como saltos en el encuesta, "no sabe" o rechazos para responder la pregunta del cuestionario. Es fundamental asegurarse de que estos valores estén estandarizados a lo largo de tu base de datos. Además, al codificar, es importante estar siempre atento a los valores perdidos y convertir a valores perdidos extendidos (por ejemplo, .d, .r, .n) donde sea posible.
 
 \textbf{¿Por qué?}
 
+Hacer un seguimiento de los valores perdidos y estandarizarlos puede mitigar numerosos problemas de codificación. En Stata especialmente, muchos errores o errores son el resultado de no darse cuenta de cómo los valores perdidos pueden afectar el análisis. Usando los valores perdidos extendidos permiten adjuntarles etiquetas de valor, lo que facilita enormemente la comprensión de qué tipos de respuestas a las que se refieren dichos valores perdidos. 
 
 \textbf{¿Cómo?}
+
+Primero, consulte la \href{http://www.poverty-action.org/research-transparency/standardizing-missing-values}{guía} de IPA para estandarizar los valores perdidos. La conclusión clave es convertir todo valor No sabe/No responde/NA al "estándar IPA" a valores perdidos extendidos como .d, .r y .n, respectivamente. Tenga en cuenta que esto no se aplica a cualquier valor de la encuesta que se omitió correctamente como parte de un patrón de omisión normal, que permanece como puntos para variables numéricas (.).
+
+Otros puntos clave:
+
+\begin{itemize}
+	\item  Recuerde que en Stata, todos los valores perdidos se consideran numéricamente más grandes que todos los valores no                      faltantes [todo valor no perdido < . < .a < .b < .c < ... < .z]. Esto significa que debe tener mucho cuidado al grabar y                reemplazar valores. Por ejemplo, si recodifica valores que son mayores que un número dado, también recodificará los                      valores perdidos. \textbf{¡Siempre tenga en cuenta los valores perdidos al codificar!} Tenga cuidado de leer                            detenidamente los archivos de ayuda de las funciones egen, ya que los valores faltantes se pueden interpretar de una                    manera que puede afectar en gran medida sus resultados (por ejemplo, \textit{rowtotal}).
+	\item  Es crítico resaltar claramente cualquier regla que trate con valores perdidos en su do-file para que la consistencia de                  los cambios puedaa ser comprobada. Por ejemplo, incluya un comentario en la parte superior de un archivo que indique                    "Los valores perdidos fueron recodificado a cero en los casos x e y".
+	\item  Los valores perdidos extendidos (a diferencia de los valores perdidos normales) pueden ser etiquetados como valores. Esto                es altamente recomendado dada la información adicional que proporciona.
+\end{itemize}
 
 %----------------------------------------------------------------------------------------
 \subsection{Escribiendo do-files}
 \label{sec:dofiles}
 %----------------------------------------------------------------------------------------
+
+\textbf{En la parte superior de cada do file debe incluir:}
+
+\begin{itemize}
+	\item Su nombre y los nombres de todas las personas que han modificado el archivo con información de contacto.
+	\item La fecha en que se creó el archivo do, así como la fecha en que se modificó más recientemente.
+	\item El propósito de este archivo do particular: ¿qué hace?
+	\item Versión 13.1 (o cualquier versión de Stata que esté utilizando actualmente). Esto asegura que su archivo será	                       compatible y replicable en futuras versiones de Stata. Esto debería escribirse como un comando, no un comentario. \end{itemize}
+
+\textbf{Recomendamos que también incluya estos elementos en un código "encabezado":}
+
+\begin{itemize}
+	\item Enumere los datos que utiliza el do-file, así como los conjuntos de datos que produce.
+	\item \textit{set more off}: esto permite que los archivos do se ejecuten sin interrupciones; de lo contrario, Stata se detendrá               periódicamente y preguntará si le gustaría ver más resultados del programa actualmente en ejecución.
+	\item Iniciar \textit{log using 'X'}: crear un archivo de registro que captura todos los resultados del do file resultante.                   [Nota: también es práctica común para incluir una línea de código que cierra cualquier archivo de registro abierto:                     textit{capture log close}, para evitar que Stata encuentre un error si un archivo de registro ya está abierto].
+	\item Establezca el directorio de trabajo utilizando fastcd, cd o globals. Trabajar con rutas de archivo se discutirá más
+              \hyperref[sec:refrelativas]{abajo}.  
+\end{itemize}
+
+Vea este do-file para ver un ejemplo de un buen encabezado: \href{http://www.poverty-action.org/research-transparency/example-header}{example_header}.
+
+\textbf{Recomendamos que también incluya estos elementos en un código "pie de página":}
+
+\begin{itemize}
+	\item \textit{capture log close}: esto garantizará que Stata deje de iniciar sesión al final de su do file.
+	\item \textit{exit}: esto detendrá la ejecución del do file.
+	\item Algunas líneas en blanco: a veces Stata no reconoce la última línea de un archivo, por lo cual siempre incluye un poco de               espacio en blanco libre.
+\end{itemize}
+
+
 
 %----------------------------------------------------------------------------------------
 \subsection{Cómo escribir un do-file maestro}
