@@ -271,11 +271,11 @@ funciona a medida que crece el número de archivos de código.
 \label{sec:refrelativas}
 %----------------------------------------------------------------------------------------
 
-Es esencial utilizar referencias relativas en su código en lugar de referencias absolutas. Una referencia absoluta es la ruta completa del archivo, como "\textit{C: / Mis documentos / Mi carpeta de proyecto / data.dta}". Nunca es una buena idea usar rutas absolutas dado que cualquier otro usuario tendría que cambiar cada ruta para que se corresponda con la suya computadora para ejecutar el código.
+Es esencial utilizar referencias relativas en su código en lugar de referencias absolutas. Una referencia absoluta es la ruta completa del archivo, como "\textit{C:/Mis documentos/Mi carpeta de proyecto/data.dta}". Nunca es una buena idea usar rutas absolutas dado que cualquier otro usuario tendría que cambiar cada ruta para que se corresponda con la suya computadora para ejecutar el código.
 
 Las referencias relativas implican crear algún tipo de taquigrafía que Stata reconoce que significa una determinada ubicación, y luego solo cambiar esa línea al cambiar de usuario, mover datos, etc. Posteriormente, todas las ubicaciones nuevas se hacen en relación con esa ubicación inicial.
 
-Hay algunas formas de usar referencias relativas:
+Algunas formas de usar referencias relativas se presentan a continuación:
 
 \begin{enumerate}
  
@@ -287,7 +287,7 @@ Por ejemplo, podríamos definir un global:
 	global path C:/My Documents/My Project Folder
 \end{lstlisting}
 
-Y luego, cada vez que llamamos a un archivo en particular, incluimos la macro 'path' dentro de la dirección del archivo, digamos:
+Y luego, cada vez que llamamos a un archivo en particular, incluimos el macro 'path' dentro de la dirección del archivo, digamos:
 
 \begin{lstlisting}
 	merge using "$path/data/baseline_clean.dta"
@@ -298,7 +298,7 @@ Y luego, cada vez que llamamos a un archivo en particular, incluimos la macro 'p
 Estableciendo el cd:
 
 \begin{lstlisting}
-	cd "C:/My Documents/My Project Folder"
+	cd "C:/Mis documentos/Mi carpeta de proyecto"
 \end{lstlisting}
 
 Y luego, cuando se refiere a los archivos:
@@ -307,7 +307,7 @@ Y luego, cuando se refiere a los archivos:
 	merge 1:1 using "data/baseline_clean.dta"
 \end{lstlisting}
 
-\textbf{Nota:} Si normalmente trabaja entre varios usuarios, puede usar el siguiente código para automatizar el directorio cambiar:
+\textbf{Nota:} Si normalmente trabaja con varios usuarios, puede usar el siguiente código para automatizar el cambio de directorio:
 
 \begin{lstlisting}
 	if c(username) == "user1" {
@@ -318,6 +318,7 @@ Y luego, cuando se refiere a los archivos:
 	}
 \end{lstlisting}
 
+\end{enumerate}
 
 %----------------------------------------------------------------------------------------
 \newpage 
@@ -423,6 +424,11 @@ Siempre que sea posible, la PII debe ser eliminada de sus datos y/o archivos do.
 \end{itemize}
 
 \end{multicols}
+
+\noindent
+\textbf{¿En qué etapa del proyecto se debe eliminar la PII?}
+
+La PII debe eliminarse lo antes posible, y los archivos que se utilizan deben estar libres de PII para eliminar riesgos. Sin embargo, si es necesario dejar la PII en la base datos para el análisis, entonces estas variables deben tenerse en cuenta y el trabajo debe realizarse dentro de una carpeta encriptada. Es esencial eliminar toda la PII antes de compartir el conjunto de datos para su publicación.
 
 %----------------------------------------------------------------------------------------
 \newpage 
