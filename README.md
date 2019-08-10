@@ -2,7 +2,9 @@
 
 Este repositorio contiene la traducción del documento "[Best Practices for Data and Code Management](https://www.poverty-action.org/publication/ipas-best-practices-data-and-code-management)" de Innovations for Poverty Action (IPA).
 
-Dado que es muy difícil encontrar literatura en español que contenga información relevante para el manejo de datos y códigos, hemos decido traducir el documento con el objetivo que estudiantes de pre-grado en países en vías de desarrollo pueden acceder a esta información. 
+Dado que es muy difícil encontrar literatura en español que contenga información relevante para el manejo de datos y códigos, hemos decido traducir el documento con el objetivo que estudiantes de pre-grado en países en vías de desarrollo pueden acceder a esta información.
+
+Para acceder a la versión traducida, pueden hacer click [aquí](https://github.com/RRMaximiliano/practicas-datos-codigos/blob/master/tex/document.pdf) o pueden descargar toda la repo. 
 
 # Contribuidores
 
